@@ -31,35 +31,39 @@ const (
 
 // BlockDevice represents a QEMU block device.
 type BlockDevice struct {
-	Device   string `json:"device"`
-	Inserted struct {
-		BackingFile      string `json:"backing_file"`
-		BackingFileDepth int    `json:"backing_file_depth"`
-		BPS              int    `json:"bps"`
-		BPSRead          int    `json:"bps_rd"`
-		BPSWrite         int    `json:"bps_wr"`
-		Cache            struct {
-			Direct    bool `json:"direct"`
-			NoFlush   bool `json:"no-flush"`
-			Writeback bool `json:"writeback"`
-		} `json:"cache"`
-		DetectZeroes         string `json:"detect_zeroes"`
-		Driver               string `json:"drv"`
-		Encrypted            bool   `json:"encrypted"`
-		EncryptionKeyMissing bool   `json:"encryption_key_missing"`
-		File                 string `json:"file"`
-		Image                Image  `json:"image"`
-		IOPs                 int    `json:"iops"`
-		IOPsRead             int    `json:"iops_rd"`
-		IOPsWrite            int    `json:"iops_wr"`
-		NodeName             string `json:"node-name"`
-		ReadOnly             bool   `json:"ro"`
-		WriteThreshold       int    `json:"write_threshold"`
-	} `json:"inserted"`
-	IOStatus  string `json:"io-status"`
-	Locked    bool   `json:"locked"`
-	Removable bool   `json:"removable"`
-	Type      string `json:"type"`
+	Device    string   `json:"device"`
+	IOStatus  string   `json:"io-status"`
+	Locked    bool     `json:"locked"`
+	Removable bool     `json:"removable"`
+	Type      string   `json:"type"`
+	Inserted  Inserted `json:"inserted"`
+}
+
+type Inserted struct {
+	BackingFile          string `json:"backing_file"`
+	BackingFileDepth     int    `json:"backing_file_depth"`
+	BPS                  int    `json:"bps"`
+	BPSRead              int    `json:"bps_rd"`
+	BPSWrite             int    `json:"bps_wr"`
+	Cache                Cache  `json:"cache"`
+	DetectZeroes         string `json:"detect_zeroes"`
+	Driver               string `json:"drv"`
+	Encrypted            bool   `json:"encrypted"`
+	EncryptionKeyMissing bool   `json:"encryption_key_missing"`
+	File                 string `json:"file"`
+	Image                Image  `json:"image"`
+	IOPs                 int    `json:"iops"`
+	IOPsRead             int    `json:"iops_rd"`
+	IOPsWrite            int    `json:"iops_wr"`
+	NodeName             string `json:"node-name"`
+	ReadOnly             bool   `json:"ro"`
+	WriteThreshold       int    `json:"write_threshold"`
+}
+
+type Cache struct {
+	Direct    bool `json:"direct"`
+	NoFlush   bool `json:"no-flush"`
+	Writeback bool `json:"writeback"`
 }
 
 // BlockJob represents a QEMU blockjob.
@@ -77,30 +81,35 @@ type BlockJob struct {
 
 // Image represents a BlockDevice backing image.
 type Image struct {
-	ActualSize            uint64 `json:"actual-size"`
-	BackingFilename       string `json:"backing-filename"`
-	BackingFilenameFormat string `json:"backing-filename-format"`
-	BackingImage          struct {
-		ActualSize  uint64 `json:"actual-size"`
-		Dirty       bool   `json:"dirty-flag"`
-		Filename    string `json:"filename"`
-		Format      string `json:"format"`
-		VirtualSize uint64 `json:"virtual-size"`
-	} `json:"backing-image"`
-	ClusterSize    int    `json:"cluster-size"`
-	Dirty          bool   `json:"dirty-flag"`
-	Filename       string `json:"filename"`
-	Format         string `json:"format"`
-	FormatSpecific struct {
-		Data struct {
-			Compat        string `json:"compat"`
-			Corrupt       bool   `json:"corrupt"`
-			LazyRefcounts bool   `json:"lazy-refcounts"`
-			RefcountBits  int    `json:"refcount-bits"`
-		} `json:"data"`
-		Type string `json:"type"`
-	} `json:"format-specific"`
+	ActualSize            uint64       `json:"actual-size"`
+	BackingFilename       string       `json:"backing-filename"`
+	BackingFilenameFormat string       `json:"backing-filename-format"`
+	BackingImage          BackingImage `json:"backing-image"`
+	ClusterSize           int          `json:"cluster-size"`
+	Dirty                 bool         `json:"dirty-flag"`
+	Filename              string       `json:"filename"`
+	Format                string       `json:"format"`
+	VirtualSize           uint64       `json:"virtual-size"`
+}
+
+type BackingImage struct {
+	ActualSize  uint64 `json:"actual-size"`
+	Dirty       bool   `json:"dirty-flag"`
+	Filename    string `json:"filename"`
+	Format      string `json:"format"`
 	VirtualSize uint64 `json:"virtual-size"`
+}
+
+type FormatSpecific struct {
+	Data Data   `json:"data"`
+	Type string `json:"type"`
+}
+
+type Data struct {
+	Compat        string `json:"compat"`
+	Corrupt       bool   `json:"corrupt"`
+	LazyRefcounts bool   `json:"lazy-refcounts"`
+	RefcountBits  int    `json:"refcount-bits"`
 }
 
 // BlockStats represents QEMU block device statistics.
